@@ -1,0 +1,32 @@
+name: Release
+
+permissions:
+    contents: write
+    pull-requests: write
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+
+  release-please-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          target-branch: main
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+
+  release:
+    needs:
+    - release-please-action
+    uses: ./.github/workflows/build_and_push.yaml
+    with:
+      tag: ${{ needs.release-please-action.outputs.tag_name}}
+    secrets: inherit
+    if: ${{ needs.release-please-action.outputs.release_created}}
