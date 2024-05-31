@@ -26,4 +26,4 @@ jobs:
         with:
             context: .
             push: true
-            tags: artnie/vlt:${{ inputs.tag }}
+            tags: artnie/vlt:${{ inputs.tag }},artnie/vlt:latest
